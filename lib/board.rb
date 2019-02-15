@@ -63,7 +63,7 @@ class Board
   def pieces(color)
     pieces = []
     @rows.each do |row|
-      row.each { |piece| pieces << piece if piece.color == color }
+      pieces.concat(row.select { |piece| piece.color == color })
     end
     pieces
   end
