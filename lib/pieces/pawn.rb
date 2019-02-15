@@ -16,7 +16,8 @@ class Pawn < Piece
     all_moves = []
     all_moves.concat(get_forward_moves)
     all_moves.concat(get_side_attacks)
-    all_moves.select { |pos| @board.valid_pos?(pos) && @board[pos].color != @color }
+    all_moves
+    # all_moves.select { |pos| @board.valid_pos?(pos) && @board[pos].color != @color }
   end
 
   private
