@@ -4,7 +4,6 @@ class Board
   attr_reader :rows
 
   def initialize
-    @nullpiece = NullPiece.instance
     @rows = fill_rows_with_nullpieces
     populate_board
     @king_black = self[[0, 4]]
@@ -26,7 +25,7 @@ class Board
     raise(ArgumentError, 'You cannot move there!') unless piece.moves.include?(end_pos)
     piece.pos = end_pos
     self[end_pos] = piece
-    self[start_pos] = @nullpiece
+    self[start_pos] = NullPiece.instance
   end
 
   def valid_pos?(pos)
@@ -79,7 +78,7 @@ class Board
   end
 
   def fill_rows_with_nullpieces
-    Array.new(8) { Array.new(8, @nullpiece) }
+    Array.new(8) { Array.new(8, NullPiece.instance) }
   end
 
   def fill_back_row(color)
