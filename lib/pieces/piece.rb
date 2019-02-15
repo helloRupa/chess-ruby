@@ -16,9 +16,9 @@ class Piece
     self.is_a?(NullPiece)
   end
 
-  def valid_moves
-    moves
-  end
+  # def valid_moves
+  #   moves
+  # end
 
   def pos=(val)
     @pos = val
