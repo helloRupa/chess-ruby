@@ -23,7 +23,7 @@ class Board
     piece = self[start_pos]
     raise(ArgumentError, 'That is an empty space: Please select a piece') if piece.empty?
     raise(ArgumentError, 'That is not your piece') if color != piece.color
-    raise(ArgumentError, 'You cannot move there!') unless piece.valid_moves.include?(end_pos)
+    raise(ArgumentError, 'You cannot move there!') unless piece.moves.include?(end_pos)
     piece.pos = end_pos
     self[end_pos] = piece
     self[start_pos] = @nullpiece
@@ -52,7 +52,7 @@ class Board
     king = find_king(color)
     opponent = get_opponent(color)
     pieces(opponent).each do |piece|
-      return true if piece.valid_moves.include?(king.pos)
+      return true if piece.moves.include?(king.pos)
     end
     false
   end
@@ -101,7 +101,7 @@ class Board
   end
 
   def test_moves_for_check(piece, color, start_pos)
-    piece.valid_moves.each do |end_pos|
+    piece.moves.each do |end_pos|
       target_piece = self[end_pos]
       move_piece!(color, start_pos, end_pos)
       check_status = in_check?(color)
@@ -145,5 +145,5 @@ if $PROGRAM_NAME == __FILE__
   # b.move_piece!(:white, [1, 3], [0, 4])
   # test_print(b)
   # p b.in_check?(:black)
-  # p b[[5, 2]].valid_moves
+  # p b[[5, 2]].moves
 end
