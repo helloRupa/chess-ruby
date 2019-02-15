@@ -39,9 +39,9 @@ module Slideable
   end
 
   # Ensure pos is on board & NOT occupied by friend
-  def valid?(pos)
-    self.board.valid_pos?(pos) && (self.color != self.board[pos].color)
-  end
+  # def valid?(pos)
+  #   self.board.valid_pos?(pos) && (self.color != self.board[pos].color)
+  # end
 
   def opponent?(pos)
     !self.board[pos].empty? && (self.color != self.board[pos].color)

@@ -21,6 +21,13 @@ class Piece
   #   moves
   # end
 
+  protected
+  
+  # Ensure pos is on board & NOT occupied by friend
+  def valid?(pos)
+    @board.valid_pos?(pos) && (@color != @board[pos].color)
+  end
+
   private
 
   def move_into_check?(end_pos)
