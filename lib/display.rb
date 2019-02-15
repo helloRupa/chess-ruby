@@ -18,18 +18,22 @@ class Display
   def render
     system('clear')
     @board.rows.each_with_index do |row, y|
-      row.each_with_index do |piece, x|
-        str = " #{piece.to_s} "
-        bg_color = get_bg_color([y, x])
-        print str.colorize(:color => get_piece_color(piece), :background => bg_color)
-        @bg = main_bg_color
-      end
+      print_row(row, y)
       @bg = main_bg_color
-      puts
     end
   end
 
   private
+
+  def print_row(row, y)
+    row.each_with_index do |piece, x|
+      str = " #{piece.to_s} "
+      bg_color = get_bg_color([y, x])
+      print str.colorize(:color => get_piece_color(piece), :background => bg_color)
+      @bg = main_bg_color
+    end
+    puts
+  end
 
   def get_bg_color(pos)
     return C_COLORS[:selected] if pos == @cursor.selected_space && cursor.selected
