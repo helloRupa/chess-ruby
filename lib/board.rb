@@ -19,16 +19,6 @@ class Board
     @rows[pos[0]][pos[1]] = val
   end
 
-  # def move_piece(start_pos, end_pos)
-  #   raise(ArgumentError, 'Invalid start pos') unless valid_pos?(start_pos)
-  #   piece = self[start_pos]
-  #   raise(ArgumentError, 'No piece at start pos') if piece.nil?
-  #   raise(ArgumentError, 'Invalid end_pos') if !valid_pos?(end_pos) || !self[end_pos].nil?
-  #   piece.pos = end_pos
-  #   self[end_pos] = piece
-  #   self[start_pos] = nil
-  # end
-
   def move_piece!(color, start_pos, end_pos)
     piece = self[start_pos]
     raise(ArgumentError, 'That is an empty space: Please select a piece') if piece.empty?
@@ -48,10 +38,14 @@ class Board
     self[pos] = piece
   end
 
+  # Is the color being tested in checkmate
   def checkmate?(color)
     return false unless in_check?(color)
-    opponent = get_opponent(color)
-    
+
+    pieces(color).each do |piece|
+      return false unless test_moves_for_check(piece, color, piece.pos)
+    end
+    true
   end
 
   def in_check?(color)
@@ -105,6 +99,24 @@ class Board
       fill_pawn_row(color)
     end
   end
+
+  def test_moves_for_check(piece, color, start_pos)
+    piece.valid_moves.each do |end_pos|
+      target_piece = self[end_pos]
+      move_piece!(color, start_pos, end_pos)
+      check_status = in_check?(color)
+      undo_move_piece!(start_pos, end_pos, target_piece)
+      return false unless check_status
+    end
+    true
+  end
+
+  def undo_move_piece!(start_pos, end_pos, target_piece)
+    moved_piece = self[end_pos]
+    moved_piece.pos = start_pos
+    self[start_pos] = moved_piece
+    self[end_pos] = target_piece
+  end
 end
 
 if $PROGRAM_NAME == __FILE__
@@ -118,17 +130,20 @@ if $PROGRAM_NAME == __FILE__
       puts
     end
   end
-
-  b.move_piece!(:white, [6, 2], [4, 2])
+  # Test for Fool's mate
+  b.move_piece!(:white, [6, 5], [5, 5])
   test_print(b)
-  b.move_piece!(:white, [4, 2], [3, 2])
+  b.move_piece!(:black, [1, 4], [3, 4])
   test_print(b)
-  b.move_piece!(:white, [3, 2], [2, 2])
+  b.move_piece!(:white, [6, 6], [4, 6])
   test_print(b)
-  b.move_piece!(:white, [2, 2], [1, 3])
+  b.move_piece!(:black, [0, 3], [4, 7])
   test_print(b)
-  b.move_piece!(:white, [1, 3], [0, 4])
-  test_print(b)
+  p b.checkmate?(:black)
+  p b.checkmate?(:white)
+  # p b.move_out_of_checkmate?(:black)
+  # b.move_piece!(:white, [1, 3], [0, 4])
+  # test_print(b)
   # p b.in_check?(:black)
   # p b[[5, 2]].valid_moves
 end
