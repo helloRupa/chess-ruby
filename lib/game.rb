@@ -14,9 +14,8 @@ class Game
 
   def play
     loop do
-      in_check_msg
-      @display.render
-      @current_player.make_move(@board)
+      show_msgs
+      show_turn
       break if won?
       swap_player
     end
@@ -24,6 +23,24 @@ class Game
   end
 
   private
+
+  def show_msgs
+    turn_msg
+    in_check_msg
+  end
+
+  def show_turn
+    @display.render
+    @current_player.make_move(@board)
+    @display.render
+    sleep(1)
+  end
+
+  def turn_msg
+    system('clear')
+    puts "#{@current_player.color.upcase}! Your turn..."
+    sleep(2)
+  end
 
   def in_check_msg
     color = @current_player.color
