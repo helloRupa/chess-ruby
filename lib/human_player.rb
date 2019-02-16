@@ -22,12 +22,16 @@ class HumanPlayer < Player
     pos
   end
 
+  def undo_selection
+    @display.cursor.toggle_selected
+  end
+
   def get_end_pos
     pos = nil
     while @display.cursor.selected
       pos = get_pos
       if pos == 'undo'
-        @display.cursor.toggle_selected
+        undo_selection
         return nil
       end
     end
