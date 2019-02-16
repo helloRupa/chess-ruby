@@ -49,9 +49,11 @@ class Display
   end
 end
 
-d = Display.new(Board.new)
-d.render
-100.times do
-  d.cursor.get_input
+if $PROGRAM_NAME == __FILE__
+  d = Display.new(Board.new)
   d.render
+  100.times do
+    d.cursor.get_input
+    d.render
+  end
 end
