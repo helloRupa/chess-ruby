@@ -30,8 +30,14 @@ class Game
   end
 
   def show_turn
-    @display.render
-    @current_player.make_move(@board)
+    begin
+      @display.render
+      @current_player.make_move(@board)
+    rescue ArgumentError => error
+      puts "#{error}. Please start your turn again."
+      sleep(2)
+      retry
+    end
     @display.render
     sleep(1)
   end
