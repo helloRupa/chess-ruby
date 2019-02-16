@@ -8,6 +8,7 @@ class Board
     populate_board
     @king_black = self[[0, 4]]
     @king_white = self[[7, 4]]
+    @captured = { white: [], black: [] }
   end
 
   def [](pos)
@@ -23,6 +24,7 @@ class Board
     raise(ArgumentError, 'That is an empty space: Please select a piece') if piece.empty?
     raise(ArgumentError, 'That is not your piece') if color != piece.color
     raise(ArgumentError, 'You cannot move there!') unless piece.moves.include?(end_pos)
+    capture(self[end_pos])
     piece.pos = end_pos
     self[end_pos] = piece
     self[start_pos] = NullPiece.instance
@@ -39,6 +41,7 @@ class Board
 
   # Is the color being tested in checkmate
   def checkmate?(color)
+    return true if king_dead?(color)
     return false unless in_check?(color)
 
     pieces(color).each do |piece|
@@ -71,10 +74,19 @@ class Board
   def dup
   end
 
-  private
-
   def get_opponent(color)
     color == :black ? :white : :black
+  end
+
+  private
+
+  def king_dead?(color)
+    @captured[color].include?(@king_black) || @captured[color].include?(@king_white)
+  end
+
+  def capture(opponent)
+    return nil if opponent.color == :none
+    @captured[opponent.color] << opponent
   end
 
   def fill_rows_with_nullpieces
