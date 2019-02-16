@@ -91,6 +91,8 @@ class Cursor
       nil
     when :ctrl_c
       exit(0)
+    when :escape
+      'undo'
     end
   end
 
