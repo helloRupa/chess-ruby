@@ -57,7 +57,7 @@ class Pawn < Piece
 
     side_attacks.each do |delta_y, delta_x|
       pos_to_test = [y + delta_y, x + delta_x]
-      break unless @board.valid_pos?(pos_to_test)
+      next unless @board.valid_pos?(pos_to_test)
       piece = @board[pos_to_test]
       all_moves << pos_to_test if opponent?(piece)
     end
