@@ -1,7 +1,7 @@
 require_relative './all_pieces.rb'
 
 class Board
-  attr_reader :rows
+  attr_reader :rows, :captured
 
   def initialize
     @rows = fill_rows_with_nullpieces
@@ -142,19 +142,22 @@ if $PROGRAM_NAME == __FILE__
     end
   end
   # Test for Fool's mate
-  b.move_piece!(:white, [6, 5], [5, 5])
-  test_print(b)
-  b.move_piece!(:black, [1, 4], [3, 4])
-  test_print(b)
-  b.move_piece!(:white, [6, 6], [4, 6])
-  test_print(b)
-  b.move_piece!(:black, [0, 3], [4, 7])
-  test_print(b)
-  p b.checkmate?(:black)
-  p b.checkmate?(:white)
-  # p b.move_out_of_checkmate?(:black)
-  # b.move_piece!(:white, [1, 3], [0, 4])
+  # b.move_piece!(:white, [6, 5], [5, 5])
   # test_print(b)
-  # p b.in_check?(:black)
-  # p b[[5, 2]].moves
+  # b.move_piece!(:black, [1, 4], [3, 4])
+  # test_print(b)
+  # b.move_piece!(:white, [6, 6], [4, 6])
+  # test_print(b)
+  # b.move_piece!(:black, [0, 3], [4, 7])
+  # test_print(b)
+  # p b.checkmate?(:black)
+  # p b.checkmate?(:white)
+  # End Fool's mate
+
+  b.move_piece!(:white, [6, 0], [4, 0])
+  test_print(b)
+  b.move_piece!(:black, [1, 1], [3, 1])
+  test_print(b)
+  
+  p b[[4, 0]].moves
 end
