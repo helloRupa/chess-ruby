@@ -21,9 +21,23 @@ class Display
       print_row(row, y)
       @bg = main_bg_color
     end
+    print_captured
   end
 
   private
+
+  def print_captured
+    puts
+    @board.captured[:white].each { |piece| print_piece(piece) }
+    puts
+    @board.captured[:black].each { |piece| print_piece(piece) }
+    puts
+  end
+
+  def print_piece(piece)
+    print piece.to_s.colorize(get_piece_color(piece))
+    print ' '
+  end
 
   def print_row(row, y)
     row.each_with_index do |piece, x|
