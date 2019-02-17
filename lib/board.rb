@@ -19,12 +19,12 @@ class Board
     @rows[pos[0]][pos[1]] = val
   end
 
-  def move_piece!(color, start_pos, end_pos)
+  def move_piece!(color, start_pos, end_pos, test_move = false)
     piece = self[start_pos]
     raise(ArgumentError, 'That is an empty space: Please select a piece') if piece.empty?
     raise(ArgumentError, 'That is not your piece') if color != piece.color
     raise(ArgumentError, 'You cannot move there!') unless piece.moves.include?(end_pos)
-    capture(self[end_pos])
+    capture(self[end_pos]) unless test_move
     piece.pos = end_pos
     self[end_pos] = piece
     self[start_pos] = NullPiece.instance
@@ -114,7 +114,7 @@ class Board
   def test_moves_for_check(piece, color, start_pos)
     piece.moves.each do |end_pos|
       target_piece = self[end_pos]
-      move_piece!(color, start_pos, end_pos)
+      move_piece!(color, start_pos, end_pos, true)
       check_status = in_check?(color)
       undo_move_piece!(start_pos, end_pos, target_piece)
       return false unless check_status
