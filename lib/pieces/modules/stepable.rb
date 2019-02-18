@@ -12,10 +12,4 @@ module Stepable
     end
     all_moves
   end
-
-  # private
-
-  # def valid?(pos)
-  #   self.board.valid_pos?(pos) && self.board[pos].color != self.color
-  # end
 end
