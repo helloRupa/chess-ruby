@@ -14,7 +14,6 @@ class Game
 
   def play
     loop do
-      show_msgs
       show_turn
       break if won?
       swap_player
@@ -24,36 +23,16 @@ class Game
 
   private
 
-  def show_msgs
-    turn_msg
-    in_check_msg
-  end
-
   def show_turn
     begin
-      @display.render
+      @display.render(@current_player.color)
       @current_player.make_move(@board)
     rescue ArgumentError => error
       puts "#{error}. Please start your turn again."
       sleep(2)
       retry
     end
-    @display.render
-    sleep(1)
-  end
-
-  def turn_msg
-    system('clear')
-    puts "#{@current_player.color.upcase}! Your turn..."
-    sleep(2)
-  end
-
-  def in_check_msg
-    color = @current_player.color
-    return unless @board.in_check?(color)
-    system('clear')
-    puts "#{color.upcase}, you are in check!"
-    sleep(2)
+    @display.render(@current_player.color)
   end
 
   def won?
