@@ -32,18 +32,9 @@ module Slideable
       pos_to_try = [y + delta_y, x + delta_x]
       break unless valid?(pos_to_try)
       all_moves << pos_to_try
-      break if opponent?(pos_to_try)
+      break if opponent?(@board[pos_to_try])
       y, x = pos_to_try
     end
     all_moves
-  end
-
-  # Ensure pos is on board & NOT occupied by friend
-  # def valid?(pos)
-  #   self.board.valid_pos?(pos) && (self.color != self.board[pos].color)
-  # end
-
-  def opponent?(pos)
-    !self.board[pos].empty? && (self.color != self.board[pos].color)
   end
 end
