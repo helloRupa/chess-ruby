@@ -15,8 +15,9 @@ class Display
     @bg = BG_COLORS[0]
   end
 
-  def render
+  def render(color)
     system('clear')
+    show_turn_data(color)
     @board.rows.each_with_index do |row, y|
       print_row(row, y)
       @bg = main_bg_color
@@ -25,6 +26,13 @@ class Display
   end
 
   private
+
+  def show_turn_data(color)
+    checked_arr = [:white, :black].select { |col| @board.in_check?(col) }
+    checked = checked_arr.length.zero? ? 'None' : checked_arr.join(', ')
+    puts "Turn: #{color.upcase}     In check: #{checked.upcase}"
+    puts
+  end
 
   def print_captured
     puts
