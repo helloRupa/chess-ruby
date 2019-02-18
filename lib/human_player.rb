@@ -39,7 +39,7 @@ class HumanPlayer < Player
   end
 
   def get_pos
-    @display.render
+    @display.render(@color)
     @display.cursor.get_input
   end
 end
