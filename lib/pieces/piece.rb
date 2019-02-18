@@ -22,10 +22,14 @@ class Piece
   # end
 
   protected
-  
+
   # Ensure pos is on board & NOT occupied by friend
   def valid?(pos)
     @board.valid_pos?(pos) && (@color != @board[pos].color)
+  end
+
+  def opponent?(piece)
+    piece.color != @color && !piece.empty?
   end
 
   private
