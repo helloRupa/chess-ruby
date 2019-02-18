@@ -21,9 +21,7 @@ class Board
 
   def move_piece!(color, start_pos, end_pos, test_move = false)
     piece = self[start_pos]
-    raise(ArgumentError, 'That is an empty space: Please select a piece') if piece.empty?
-    raise(ArgumentError, 'That is not your piece') if color != piece.color
-    raise(ArgumentError, 'You cannot move there!') unless piece.moves.include?(end_pos)
+    error_check(color, piece, end_pos)
     capture(self[end_pos]) unless test_move
     piece.pos = end_pos
     self[end_pos] = piece
@@ -80,12 +78,18 @@ class Board
 
   private
 
+  def error_check(color, piece, end_pos)
+    raise(ArgumentError, 'That is an empty space: Please select a piece') if piece.empty?
+    raise(ArgumentError, 'That is not your piece') if color != piece.color
+    raise(ArgumentError, 'You cannot move there!') unless piece.moves.include?(end_pos)
+  end
+
   def king_dead?(color)
     @captured[color].include?(@king_black) || @captured[color].include?(@king_white)
   end
 
   def capture(opponent)
-    return nil if opponent.color == :none
+    return if opponent.color == :none
     @captured[opponent.color] << opponent
   end
 
