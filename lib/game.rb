@@ -3,6 +3,12 @@ require_relative './display.rb'
 require_relative './human_player.rb'
 
 class Game
+  def self.run_game(player_arr)
+    new(player_arr)
+  end
+
+  private_class_method :new
+
   def initialize(player_arr)
     @board = Board.new
     @display = Display.new(@board)
@@ -28,11 +34,15 @@ class Game
       @display.render(@current_player.color)
       @current_player.make_move(@board)
     rescue ArgumentError => error
-      puts "#{error}. Please start your turn again."
-      sleep(2)
+      show_error(error)
       retry
     end
     @display.render(@current_player.color)
+  end
+
+  def show_error(error)
+    puts "#{error}. Please start your turn again."
+    sleep(2)
   end
 
   def won?
@@ -72,5 +82,6 @@ class Game
 end
 
 if $PROGRAM_NAME == __FILE__
-  game = Game.new(['human', 'human'])
+  # game = Game.new(['human', 'human'])
+  Game.run_game(['human', 'human'])
 end
