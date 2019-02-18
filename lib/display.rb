@@ -18,10 +18,7 @@ class Display
   def render(color)
     system('clear')
     show_turn_data(color)
-    @board.rows.each_with_index do |row, y|
-      print_row(row, y)
-      @bg = main_bg_color
-    end
+    print_rows
     print_captured
   end
 
@@ -45,6 +42,13 @@ class Display
   def print_piece(piece)
     print piece.to_s.colorize(get_piece_color(piece))
     print ' '
+  end
+
+  def print_rows
+    @board.rows.each_with_index do |row, y|
+      print_row(row, y)
+      @bg = main_bg_color
+    end
   end
 
   def print_row(row, y)
