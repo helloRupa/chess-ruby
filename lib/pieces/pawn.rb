@@ -9,15 +9,11 @@ class Pawn < Piece
     "\u265F"
   end
 
-  # def move_dirs
-  # end
-
   def moves
     all_moves = []
     all_moves.concat(get_forward_moves)
     all_moves.concat(get_side_attacks)
     all_moves
-    # all_moves.select { |pos| @board.valid_pos?(pos) && @board[pos].color != @color }
   end
 
   private
@@ -62,9 +58,5 @@ class Pawn < Piece
       all_moves << pos_to_test if opponent?(piece)
     end
     all_moves
-  end
-
-  def opponent?(piece)
-    piece.color != @color && !piece.empty?
   end
 end
