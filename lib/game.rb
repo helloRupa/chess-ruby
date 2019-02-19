@@ -1,6 +1,7 @@
 require_relative './board.rb'
 require_relative './display.rb'
 require_relative './human_player.rb'
+require_relative './computer_player.rb'
 
 class Game
   def self.run_game(player_arr)
@@ -69,10 +70,10 @@ class Game
   def swap_player
     @current_player = @current_player == @players[:white] ? @players[:black] : @players[:white]
   end
-  
+
   def create_players(player_arr)
-    p_black = choose_player_type(player_arr[0], :black)
-    p_white = choose_player_type(player_arr[1], :white)
+    p_white = choose_player_type(player_arr[0], :white)
+    p_black = choose_player_type(player_arr[1], :black)
     { black: p_black, white: p_white }
   end
 
@@ -83,5 +84,5 @@ end
 
 if $PROGRAM_NAME == __FILE__
   # game = Game.new(['human', 'human'])
-  Game.run_game(['human', 'human'])
+  Game.run_game(['human', 'computer'])
 end
