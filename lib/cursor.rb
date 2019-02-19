@@ -49,6 +49,11 @@ class Cursor
     @selected = !@selected
   end
 
+  def cursor_pos=(coords)
+    return unless coords.is_a?(Array) && coords.length == 2
+    @cursor_pos = coords
+  end
+
   private
 
   def read_char
