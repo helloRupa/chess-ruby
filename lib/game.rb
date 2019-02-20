@@ -22,10 +22,10 @@ class Game
   def play
     loop do
       show_turn
-      break if won?
+      break if won? || draw?
       swap_player
     end
-    win_msg
+    game_over_msg
   end
 
   private
@@ -52,6 +52,10 @@ class Game
     @board.checkmate?(opponent)
   end
 
+  def draw?
+    @board.draw?
+  end
+
   def welcome_msg
     system('clear')
     puts 'Welcome to Chess!'
@@ -60,6 +64,14 @@ class Game
     puts 'Press Enter to select a piece, then select a space to move to and press Enter again.'
     puts 'To undo a selection, press Escape before choosing a space to move to.'
     sleep(5)
+  end
+
+  def game_over_msg
+    draw? ? draw_msg : win_msg
+  end
+
+  def draw_msg
+    puts 'No winner today! Game is tied.'
   end
 
   def win_msg
@@ -84,5 +96,5 @@ end
 
 if $PROGRAM_NAME == __FILE__
   # game = Game.new(['human', 'human'])
-  Game.run_game(['human', 'computer'])
+  Game.run_game(['computer', 'computer'])
 end
