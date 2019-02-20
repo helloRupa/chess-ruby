@@ -26,7 +26,7 @@ class Board
     piece.pos = end_pos
     self[end_pos] = piece
     self[start_pos] = NullPiece.instance
-    promote_pawn(piece)
+    handle_pawn(piece)
   end
 
   def valid_pos?(pos)
@@ -95,6 +95,28 @@ class Board
     pos = piece.pos
     color = piece.color
     Queen.new(color, self, pos)
+  end
+
+  def handle_pawn(piece)
+    return unless piece.is_a?(Pawn)
+    pawn_en_passant(piece)
+    piece.set_first_move
+    promote_pawn(piece)
+  end
+
+  def pawn_en_passant(piece)
+    piece.set_en_passant
+    opponent = get_opponent(piece.color)
+    other_piece = self[[piece.pos[0] - piece.forward_dir, piece.pos[1]]]
+
+    if other_piece.is_a?(Pawn) && other_piece.en_passant
+      capture(other_piece)
+      self[other_piece.pos] = NullPiece.instance
+    end
+
+    pieces(opponent).each do |p|
+      p.en_passant_false if p.is_a?(Pawn)
+    end
   end
 
   def error_check(color, piece, end_pos)
