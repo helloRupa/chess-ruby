@@ -17,12 +17,12 @@ class ComputerPlayer < Player
   private
 
   def choose_random_piece(board)
-    pieces = board.pieces(@color).reject { |piece| piece.moves.empty? }
+    pieces = board.pieces(@color).reject { |piece| piece.valid_moves.empty? }
     pieces.sample
   end
 
   def choose_end_pos(piece)
-    piece.moves.sample
+    piece.valid_moves.sample
   end
 
   def move_cursor(end_pos)

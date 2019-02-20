@@ -19,10 +19,10 @@ class Board
     @rows[pos[0]][pos[1]] = val
   end
 
-  def move_piece!(color, start_pos, end_pos, test_move = false)
+  def move_piece!(color, start_pos, end_pos)
     piece = self[start_pos]
     error_check(color, piece, end_pos)
-    capture(self[end_pos]) unless test_move
+    capture(self[end_pos])
     piece.pos = end_pos
     self[end_pos] = piece
     self[start_pos] = NullPiece.instance
@@ -39,22 +39,19 @@ class Board
 
   # Is the color being tested in checkmate
   def checkmate?(color)
-    return true if king_dead?(color)
-    return false unless in_check?(color)
-
-    pieces(color).each do |piece|
-      return false unless test_moves_for_check(piece, color, piece.pos)
-    end
-    true
+    pieces(color).all? { |piece| piece.valid_moves.empty? }
   end
 
   def in_check?(color)
     king = find_king(color)
     opponent = get_opponent(color)
-    pieces(opponent).each do |piece|
-      return true if piece.moves.include?(king.pos)
-    end
-    false
+    pieces(opponent).any? { |piece| piece.moves.include?(king.pos) }
+  end
+
+  def draw?
+    @rows.reduce(0) do |count, row|
+      count + row.reject(&:empty?).length
+    end == 2
   end
 
   def find_king(color)
@@ -76,16 +73,26 @@ class Board
     color == :black ? :white : :black
   end
 
+  def move_piece(start_pos, end_pos)
+    piece = self[start_pos]
+    piece.pos = end_pos
+    self[end_pos] = piece
+    self[start_pos] = NullPiece.instance
+  end
+
+  def undo_move_piece(start_pos, end_pos, target_piece)
+    moved_piece = self[end_pos]
+    moved_piece.pos = start_pos
+    self[start_pos] = moved_piece
+    self[end_pos] = target_piece
+  end
+
   private
 
   def error_check(color, piece, end_pos)
     raise(ArgumentError, 'That is an empty space: Please select a piece') if piece.empty?
     raise(ArgumentError, 'That is not your piece') if color != piece.color
-    raise(ArgumentError, 'You cannot move there!') unless piece.moves.include?(end_pos)
-  end
-
-  def king_dead?(color)
-    @captured[color].include?(@king_black) || @captured[color].include?(@king_white)
+    raise(ArgumentError, 'You cannot move there!') unless piece.valid_moves.include?(end_pos)
   end
 
   def capture(opponent)
@@ -113,24 +120,6 @@ class Board
       fill_back_row(color)
       fill_pawn_row(color)
     end
-  end
-
-  def test_moves_for_check(piece, color, start_pos)
-    piece.moves.each do |end_pos|
-      target_piece = self[end_pos]
-      move_piece!(color, start_pos, end_pos, true)
-      check_status = in_check?(color)
-      undo_move_piece!(start_pos, end_pos, target_piece)
-      return false unless check_status
-    end
-    true
-  end
-
-  def undo_move_piece!(start_pos, end_pos, target_piece)
-    moved_piece = self[end_pos]
-    moved_piece.pos = start_pos
-    self[start_pos] = moved_piece
-    self[end_pos] = target_piece
   end
 end
 
@@ -163,5 +152,5 @@ if $PROGRAM_NAME == __FILE__
   b.move_piece!(:black, [1, 1], [3, 1])
   test_print(b)
   
-  p b[[4, 0]].moves
+  p b[[4, 0]].valid_moves
 end
