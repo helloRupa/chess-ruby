@@ -17,9 +17,9 @@ class Piece
     self.is_a?(NullPiece)
   end
 
-  # def valid_moves
-  #   moves
-  # end
+  def valid_moves
+    moves.reject { |move| move_into_check?(move) }
+  end
 
   protected
 
@@ -35,5 +35,11 @@ class Piece
   private
 
   def move_into_check?(end_pos)
+    start_pos = @pos
+    target_piece = @board[end_pos]
+    @board.move_piece(start_pos, end_pos)
+    check_status = @board.in_check?(@color)
+    @board.undo_move_piece(start_pos, end_pos, target_piece)
+    check_status
   end
 end
