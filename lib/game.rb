@@ -42,7 +42,7 @@ class Game
   end
 
   def show_error(error)
-    puts "#{error}. Please start your turn again."
+    puts "#{error} Please start your turn again."
     sleep(2)
   end
 
@@ -96,5 +96,5 @@ end
 
 if $PROGRAM_NAME == __FILE__
   # game = Game.new(['human', 'human'])
-  Game.run_game(['computer', 'computer'])
+  Game.run_game(['human', 'human'])
 end
