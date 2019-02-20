@@ -21,6 +21,10 @@ class Piece
     moves.reject { |move| move_into_check?(move) }
   end
 
+  def promote?
+    false
+  end
+
   protected
 
   # Ensure pos is on board & NOT occupied by friend

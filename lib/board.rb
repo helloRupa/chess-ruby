@@ -26,6 +26,7 @@ class Board
     piece.pos = end_pos
     self[end_pos] = piece
     self[start_pos] = NullPiece.instance
+    promote_pawn(piece)
   end
 
   def valid_pos?(pos)
@@ -88,6 +89,13 @@ class Board
   end
 
   private
+
+  def promote_pawn(piece)
+    return unless piece.promote?
+    pos = piece.pos
+    color = piece.color
+    Queen.new(color, self, pos)
+  end
 
   def error_check(color, piece, end_pos)
     raise(ArgumentError, 'That is an empty space: Please select a piece') if piece.empty?

@@ -16,7 +16,15 @@ class Pawn < Piece
     all_moves
   end
 
+  def promote?
+    at_end_row?
+  end
+
   private
+
+  def at_end_row?
+    @color == :black ? (pos[0] == 7) : (pos[0] == 0)
+  end
 
   def at_start_row?
     @color == :black ? (pos[0] == 1) : (pos[0] == 6)
