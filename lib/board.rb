@@ -23,9 +23,7 @@ class Board
     piece = self[start_pos]
     error_check(color, piece, end_pos)
     capture(self[end_pos])
-    piece.pos = end_pos
-    self[end_pos] = piece
-    self[start_pos] = NullPiece.instance
+    move_piece(piece, end_pos)
     handle_pawn(piece)
   end
 
@@ -74,8 +72,8 @@ class Board
     color == :black ? :white : :black
   end
 
-  def move_piece(start_pos, end_pos)
-    piece = self[start_pos]
+  def move_piece(piece, end_pos)
+    start_pos = piece.pos
     piece.pos = end_pos
     self[end_pos] = piece
     self[start_pos] = NullPiece.instance
