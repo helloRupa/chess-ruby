@@ -1,11 +1,12 @@
 class Piece
-  attr_reader :color, :board
+  attr_reader :color, :board, :first_move
   attr_accessor :pos
 
   def initialize(color, board, pos)
     @color = color
     @board = board
     @pos = pos
+    @first_move = true
     @board.add_piece(self, pos)
   end
 
@@ -18,7 +19,13 @@ class Piece
   end
 
   def valid_moves
-    moves.reject { |move| move_into_check?(move) }
+    all_moves = moves.reject { |move| move_into_check?(move) }
+    all_moves = all_moves.concat(self.castle_moves) if self.is_a?(King)
+    all_moves
+  end
+
+  def set_first_move
+    @first_move = false
   end
 
   protected

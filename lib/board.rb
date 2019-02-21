@@ -25,6 +25,8 @@ class Board
     capture(self[end_pos])
     move_piece(piece, end_pos)
     handle_pawn(piece)
+    handle_king(piece)
+    piece.set_first_move
   end
 
   def valid_pos?(pos)
@@ -88,6 +90,13 @@ class Board
 
   private
 
+  def handle_king(piece)
+    return unless piece.is_a?(King) && piece.first_move && piece.two_step?
+    rook = piece.nearest_rook
+    end_pos = [rook.pos[0], rook.pos[1] + rook.delta_x]
+    move_piece(rook, end_pos)
+  end
+
   def promote_pawn(piece)
     return unless piece.promote?
     pos = piece.pos
@@ -98,7 +107,6 @@ class Board
   def handle_pawn(piece)
     return unless piece.is_a?(Pawn)
     pawn_en_passant(piece)
-    piece.set_first_move
     promote_pawn(piece)
   end
 
