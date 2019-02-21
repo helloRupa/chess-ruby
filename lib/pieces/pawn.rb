@@ -6,7 +6,6 @@ class Pawn < Piece
   def initialize(color, board, pos)
     super
     @en_passant = false
-    @first_move = true
   end
 
   def symbol
@@ -18,7 +17,6 @@ class Pawn < Piece
     all_moves.concat(get_forward_moves)
     all_moves.concat(get_side_attacks)
     all_moves.concat(get_en_passant_attacks)
-    all_moves
   end
 
   def promote?
@@ -32,10 +30,6 @@ class Pawn < Piece
 
   def en_passant_false
     @en_passant = false
-  end
-
-  def set_first_move
-    @first_move = false
   end
 
   def forward_dir
