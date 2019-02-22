@@ -7,7 +7,6 @@ class Piece
     @board = board
     @pos = pos
     @first_move = true
-    @board.add_piece(self, pos)
   end
 
   def to_s
@@ -26,6 +25,10 @@ class Piece
 
   def set_first_move
     @first_move = false
+  end
+
+  def change_board(board)
+    @board = board
   end
 
   protected
