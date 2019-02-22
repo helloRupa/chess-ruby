@@ -3,12 +3,13 @@ require_relative './all_pieces.rb'
 class Board
   attr_reader :rows, :captured
 
-  def initialize
+  def initialize(duping = false)
     @rows = fill_rows_with_nullpieces
+    @captured = { white: [], black: [] }
+    return if duping
     populate_board
     @king_black = self[[0, 4]]
     @king_white = self[[7, 4]]
-    @captured = { white: [], black: [] }
   end
 
   def [](pos)
@@ -68,6 +69,9 @@ class Board
   end
 
   def dup
+    copy = Board.new(true)
+    @rows.each { |row| copy_row(copy, row) }
+    copy
   end
 
   def get_opponent(color)
@@ -89,6 +93,18 @@ class Board
   end
 
   private
+
+  def copy_row(board_copy, row)
+    row.each do |piece|
+      next if piece.is_a?(NullPiece)
+      piece_copy = piece.clone
+      piece_copy.change_board(board_copy)
+      board_copy.add_piece(piece_copy, piece_copy.pos)
+      next unless piece.is_a?(King)
+      piece.color == :black ? board_copy.instance_variable_set(:@king_black, piece_copy) : 
+                              board_copy.instance_variable_set(:@king_white, piece_copy)
+    end
+  end
 
   def handle_king(piece)
     return unless piece.is_a?(King) && piece.first_move && piece.two_step?
@@ -143,16 +159,22 @@ class Board
   def fill_back_row(color)
     row = color == :black ? 0 : 7
     pieces = [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook]
-    pieces.each_with_index { |piece, col| piece.new(color, self, [row, col]) }
+    pieces.each_with_index do |piece, col|
+      pos = [row, col]
+      add_piece(piece.new(color, self, pos), pos)
+    end
   end
 
   def fill_pawn_row(color)
     row = color == :black ? 1 : 6
-    (0..7).each { |col| Pawn.new(color, self, [row, col]) }
+    (0..7).each do |col|
+      pos = [row, col]
+      add_piece(Pawn.new(color, self, pos), pos)
+    end
   end
 
   def populate_board
-    [:black, :white].each do |color|
+    %i[black white].each do |color|
       fill_back_row(color)
       fill_pawn_row(color)
     end
@@ -187,6 +209,6 @@ if $PROGRAM_NAME == __FILE__
   test_print(b)
   b.move_piece!(:black, [1, 1], [3, 1])
   test_print(b)
-  
+
   p b[[4, 0]].valid_moves
 end
