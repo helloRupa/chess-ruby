@@ -5,7 +5,7 @@ require 'colorize'
 class Display
   C_COLORS = { main: :blue, selected: :light_magenta }.freeze
   BG_COLORS = [:light_white, :black].freeze
-  PIECE_COLORS = { black: :light_cyan, white: :light_red }.freeze
+  PIECE_COLORS = { black: :cyan, white: :light_red }.freeze
 
   attr_reader :cursor, :board
 
