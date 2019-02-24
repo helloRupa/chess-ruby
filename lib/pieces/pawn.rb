@@ -50,8 +50,8 @@ class Pawn < Piece
     all_moves
   end
 
-  def enemy_pawn_behind?(pos)
-    pos_to_test = [pos[0] - forward_dir, pos[1]]
+  def enemy_pawn_behind?(coords)
+    pos_to_test = [coords[0] - forward_dir, coords[1]]
     return false unless @board.valid_pos?(pos_to_test)
     piece = @board[pos_to_test]
     opponent?(piece) && piece.is_a?(Pawn) && piece.en_passant
@@ -77,11 +77,11 @@ class Pawn < Piece
   end
 
   def at_end_row?
-    @color == :black ? (pos[0] == 7) : (pos[0] == 0)
+    @color == :black ? (@pos[0] == 7) : (@pos[0] == 0)
   end
 
   def at_start_row?
-    pos[0] == start_row
+    @pos[0] == start_row
   end
 
   def start_row
