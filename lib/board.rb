@@ -117,7 +117,7 @@ class Board
     return unless piece.promote?
     pos = piece.pos
     color = piece.color
-    Queen.new(color, self, pos)
+    add_piece(Queen.new(color, self, pos), pos)
   end
 
   def handle_pawn(piece)
