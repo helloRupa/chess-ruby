@@ -2,10 +2,10 @@ class PointSystem
   POINTS = {
     pawn: 100,
     knight: 300,
-    bishop: 325,
+    bishop: 300,
     rook: 500,
     queen: 900,
-    king: 90_000
+    king: 9000
   }.freeze
 
   SPACE_EVAL = {
